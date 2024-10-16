@@ -1,0 +1,112 @@
+---
+- name: Esempio di utilizzo di bcl_destinations su più host
+  hosts: windows_host
+  strategy: linear
+  gather_facts: true
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+
+  tasks:
+
+    - name: Carica configurazione dinamica da file YAML
+      include_vars:
+        file: "{{ config_file }}"
+        name: bcl_config
+
+  ###################
+  ###  LOCALHOST  ###
+  ###################
+  ###  WINDOWS PART ###
+  #####################
+
+    - name: Windows/Linux Block
+      block:
+      - name: type=Hard Delete Old folder - Windows
+        ansible.builtin.win_file:
+          path: "{{ item.0.dest }}"
+          state: absent
+        with_subelements:
+          - "{{ bcl_config.bcl_destinations }}"
+          - src
+        when:
+          - item.0.type | default("soft") == 'hard'
+          - ansible_os_family == "Windows"
+        tags:
+          - delete
+          - windows
+
+      - name: Create Directory - Windows
+        ansible.builtin.win_file:
+          path: "{{ item.0.dest }}"
+          state: directory
+          force: true
+        with_subelements:
+          - "{{ bcl_config.bcl_destinations }}"
+          - src
+        when:
+          - ansible_os_family == "Windows"
+        tags:
+          - create
+          - windows
+
+  ###################
+  ###  LINUX PART ###
+  ###################
+
+      - name: type=Hard Delete Old folder - Linux
+        ansible.builtin.file:
+          path: "{{ item.0.dest }}"
+          state: absent
+        with_subelements:
+          - "{{ bcl_config.bcl_destinations }}"
+          - src
+        when:
+          - item.0.type | default("soft") == 'hard'
+          - ansible_os_family != "Windows"
+        tags:
+          - delete
+          - linux
+
+      - name: Create Directory - Linux
+        ansible.builtin.file:
+          path: "{{ item.0.dest }}"
+          state: directory
+          force: true
+        with_subelements:
+          - "{{ bcl_config.bcl_destinations }}"
+          - src
+        when:
+          - ansible_os_family != "Windows"
+        tags:
+          - create
+          - linux
+
+    - name: Copy in local Windows
+      ansible.builtin.win_copy:
+        dest: "{{ item.0.dest }}"
+        src: "{{ item.1 }}"
+      when:
+        - bcl_config.bcl_destinations is defined
+        - item.0.type | default("soft") == 'soft' or 'hard'
+        - ansible_os_family == "Windows"
+      with_subelements:
+        - "{{ bcl_config.bcl_destinations }}"
+        - src
+      tags:
+        - copy
+        - windows
+
+    - name: Copy in Linux
+      ansible.builtin.copy:
+        dest: "{{ item.0.dest }}"
+        src: "{{ item.1 }}"
+      when:
+        - bcl_config.bcl_destinations is defined
+        - item.0.type | default("soft") == 'soft' or 'hard^'
+        - ansible_os_family != "Windows"
+      with_subelements:
+        - "{{ bcl_config.bcl_destinations }}"
+        - src
+      tags:
+        - copy
+        - linux

@@ -1,0 +1,17 @@
+bcl_machines:
+  hosts:
+    localhost:
+      ansible_host: localhost
+      ansible_connection: local
+      ansible_become: true
+      ansible_become_password: levap
+    windows_host:
+      ansible_host: 10.211.55.4
+      ansible_port: 5985
+      ansible_user: pavelfilingeri
+      ansible_password: pavel,pavel
+      ansible_connection: winrm
+      ansible_winrm_transport: ntlm
+      ansible_winrm_server_cert_validation: ignore
+
+

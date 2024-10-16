@@ -1,0 +1,36 @@
+bcl_destinations:
+  windows:
+  - dest: "C:\\Users\\pavelfilingeri\\Desktop\\Pavel\\dest_folder"
+    type: "hard"
+    src:
+    - "/etc/ansible/test_1"
+  - dest: "C:\\Users\\pavelfilingeri\\Desktop\\pavelito"
+    src:
+    - "/etc/ansible/test_1"
+    - "/etc/ansible/test_2"
+  - dest: "C:\\Users\\pavelfilingeri\\Desktop\\test_python"
+    type: "soft"
+    src:
+    - "/etc/ansible/test_2"
+  - dest: "C:\\Users\\pavelfilingeri\\Desktop\\test_pythona"
+    type: "soft"
+    src:
+    - "/etc/ansible/test_1"
+  linux:
+  - dest: "/etc/ansible/pavel"
+    type: "hard"
+    src:
+    - "/etc/ansible/test_1"
+  - dest: "/etc/ansible/pavel1"
+    src:
+    - "/etc/ansible/test_1"
+    - "/etc/ansible/test_2"
+  - dest: "/etc/ansible/pavel2"
+    type: "soft"
+    src:
+    - "/etc/ansible/test_2"
+  - dest: "/etc/ansible/pavel3"
+    type: "soft"
+    src:
+    - "/etc/ansible/test_1"
+

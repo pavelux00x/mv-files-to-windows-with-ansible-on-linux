@@ -1,0 +1,17 @@
+bcl_destinations:
+  - dest: "C:\\Users\\pavelfilingeri\\Desktop\\Pavel\\dest_folder"
+    type: "hard"
+    src:
+      - "/etc/ansible/test_1"
+  - dest: "C:\\Users\\pavelfilingeri\\Desktop\\pavelito"
+    src:
+      - "/etc/ansible/test_1"
+      - "/etc/ansible/test_2"
+  - dest: "C:\\Users\\pavelfilingeri\\Desktop\\test_python"
+    type: "soft"
+    src:
+      - "/etc/ansible/test_2"
+  - dest: "C:\\Users\\pavelfilingeri\\Desktop\\test_pythona"
+    type: "soft"
+    src:
+      - "/etc/ansible/test_1" 
